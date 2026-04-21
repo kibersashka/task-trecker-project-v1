@@ -101,7 +101,8 @@ fabric.properties
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+mvnw
+mvnw.cmd
 # Package Files #
 *.jar
 *.war
