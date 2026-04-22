@@ -103,6 +103,8 @@ fabric.properties
 .mtj.tmp/
 mvnw
 mvnw.cmd
+.mvn/wrapper
+.gitattributes
 # Package Files #
 *.jar
 *.war
@@ -135,4 +137,6 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# End of https://www.toptal.com/developers/gitignore/api/java,intellij+all,maven
+# End of https://www.toptal.com/developers/gitignore/api/java,intellij+all,mavenmvnw
+mvnw.cmd
+.mvn/wrapper/
