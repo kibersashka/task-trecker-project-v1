@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - include:
+      file: db/v1/DDL/20260604-create-table-booking.yml
+
+
+
+
+
