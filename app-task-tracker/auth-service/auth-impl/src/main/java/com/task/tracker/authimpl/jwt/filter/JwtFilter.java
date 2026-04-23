@@ -34,6 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
 
+            if(request.getRequestURI().startsWith("/auth")) {
+                filterChain.doFilter(request, response);
+
+                return;
+
+            }
             String header = request.getHeader(AUTHORIZATION);
             String token = getTokenFromValidatedAuthorizationHeader(header);
 
@@ -67,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            log.error("Ошибка в фильтре сделать отлов");
+            log.error("Ошибка в фильтре сделать отлов {}", e.getMessage());
         }
     }
 

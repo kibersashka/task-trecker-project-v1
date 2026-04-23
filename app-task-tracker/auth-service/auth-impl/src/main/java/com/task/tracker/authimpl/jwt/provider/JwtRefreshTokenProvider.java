@@ -1,5 +1,6 @@
 package com.task.tracker.authimpl.jwt.provider;
 
+import com.task.tracker.authimpl.entity.RefreshToken;
 import com.task.tracker.authimpl.jwt.properties.JwtTokenProperties;
 import com.task.tracker.authimpl.repository.RefreshTokenRepository;
 import com.task.tracker.authimpl.service.RefreshTokenService;
@@ -48,6 +49,10 @@ public class JwtRefreshTokenProvider {
         String tokenHash = hash(requestRefreshToken);
         refreshTokenRepository.remove(tokenHash);
 
+    }
+
+    public RefreshToken getAndRemove(String refreshToken) {
+        return refreshTokenRepository.getAndRemove(hash(refreshToken));
     }
 
     private String hash(String rawToken) {
