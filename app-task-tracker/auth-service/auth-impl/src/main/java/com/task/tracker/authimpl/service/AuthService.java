@@ -3,6 +3,10 @@ package com.task.tracker.authimpl.service;
 import com.task.tracker.authapi.dto.*;
 import com.task.tracker.authapi.status.Role;
 import com.task.tracker.authimpl.entity.Account;
+import com.task.tracker.authimpl.entity.RefreshToken;
+import com.task.tracker.authimpl.exception.AccountNotFoundException;
+import com.task.tracker.authimpl.exception.InvalidSessionException;
+import com.task.tracker.authimpl.jwt.provider.JwtRefreshTokenProvider;
 import com.task.tracker.authimpl.jwt.service.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AccountService accountService;
     private final AuthenticatedService authenticatedService;
+    private final JwtRefreshTokenProvider jwtRefreshTokenProvider;
 
     @Transactional
     public TokenCouple login(String username, String password) {
@@ -35,8 +40,16 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenCouple refresh(Account account) {
-        return jwtService.generateTokenCouple(account);
+    public TokenCouple refresh(String token) {
+        RefreshToken refreshToken = jwtRefreshTokenProvider.getAndRemove(token);
+        try {
+            Account account = accountService.findAccountById(refreshToken.getAccountId());
+            accountService.isActive(account);
+            return jwtService.generateTokenCouple(account);
+        } catch (AccountNotFoundException e) {
+            log.warn("Account not found exception | accountId={}", refreshToken.getAccountId());
+            throw new InvalidSessionException();
+        }
     }
 
     @Transactional
