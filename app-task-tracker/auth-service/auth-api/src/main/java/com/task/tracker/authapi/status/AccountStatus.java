@@ -1,4 +1,4 @@
-package com.task.tracker.authimpl.role;
+package com.task.tracker.authapi.status;
 
 public enum AccountStatus {
     ACTIVE,

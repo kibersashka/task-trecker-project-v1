@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260101-1-create-account
+      author: adveldyaeva
+      changes:
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: hashed_password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+
+  - changeSet:
+      id: 20260101-2-create-account-roles
+      author: adveldyaeva
+      changes:
+        - createTable:
+            tableName: account_roles
+            columns:
+              - column:
+                  name: account_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_account_roles_account
+                    references: account(id)
+              - column:
+                  name: role
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: account_roles
+            columnNames: account_id, role

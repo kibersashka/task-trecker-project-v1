@@ -1,6 +1,7 @@
 databaseChangeLog:
   - include:
-      file: db/v1/DDL/20260604-create-table-booking.yml
+      file: db/v1/DDL/20262204-create-account.yml
+      relativeToChangelogFile: false
 
 
 

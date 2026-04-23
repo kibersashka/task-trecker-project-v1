@@ -1,8 +1,7 @@
 package com.task.tracker.authimpl.accountDetails.model;
 
 import com.task.tracker.authimpl.entity.Account;
-import com.task.tracker.authimpl.role.AccountStatus;
-import org.jspecify.annotations.Nullable;
+import com.task.tracker.authapi.status.AccountStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +12,11 @@ import java.util.List;
 public record AccountDetails(Account account) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(account.getRole().name())));
+        return List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(account.getRoles())));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return account.getHashedPassword();
     }
 

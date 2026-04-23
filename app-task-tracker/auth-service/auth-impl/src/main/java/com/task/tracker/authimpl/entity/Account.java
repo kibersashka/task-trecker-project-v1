@@ -1,13 +1,13 @@
 package com.task.tracker.authimpl.entity;
 
-import com.task.tracker.authimpl.role.AccountStatus;
-import com.task.tracker.authimpl.role.Role;
+import com.task.tracker.authapi.status.AccountStatus;
+import com.task.tracker.authapi.status.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -35,9 +35,13 @@ public class Account {
 
     private boolean enabled;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "account_roles", joinColumns = @JoinColumn(name = "account_id"))
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Set<Role> roles;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
+
 }
