@@ -3,9 +3,11 @@ package com.task.tracker.authimpl.repository;
 import com.task.tracker.authimpl.entity.Account;
 import com.task.tracker.authimpl.entity.RefreshToken;
 import com.task.tracker.authimpl.exception.JwtNotValidException;
-import com.task.tracker.authimpl.jwt.JwtTokenProperties;
+import com.task.tracker.authimpl.jwt.properties.JwtTokenProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,12 +19,27 @@ import java.util.UUID;
 
 @Repository
 @Slf4j
-@RequiredArgsConstructor
 public class RefreshTokenRepository {
-
+    @Qualifier("refreshTokenRedisTemplate")
     private final RedisTemplate<String, RefreshToken> redisTemplate;
+
+    @Qualifier("stringStringRedisTemplate")
     private final RedisTemplate<String, String> redisSetTemplate;
     private final JwtTokenProperties jwtTokenProperties;
+
+    public RefreshTokenRepository(
+            @Qualifier("refreshTokenRedisTemplate")
+            RedisTemplate<String, RefreshToken> redisTemplate,
+
+            @Qualifier("stringStringRedisTemplate")
+            RedisTemplate<String, String> redisSetTemplate,
+
+            JwtTokenProperties jwtTokenProperties
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.redisSetTemplate = redisSetTemplate;
+        this.jwtTokenProperties = jwtTokenProperties;
+    }
 
     private static final String TOKEN_KEY = "refresh_token:%s";
     private static final String SESSION_KEY = "account_sessions:%s";

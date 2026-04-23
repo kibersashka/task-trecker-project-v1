@@ -1,7 +1,6 @@
-package com.task.tracker.authimpl.jwt;
+package com.task.tracker.authimpl.jwt.properties;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
