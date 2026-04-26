@@ -1,8 +1,8 @@
 package com.task.tracker.authapi.controller;
 
 import com.task.tracker.authapi.dto.LoginResponse;
-import com.task.tracker.authapi.dto.SignInRequest;
-import com.task.tracker.authapi.dto.SignInResponse;
+import com.task.tracker.authapi.dto.SignUpRequest;
+import com.task.tracker.authapi.dto.SignUpResponse;
 import com.task.tracker.authapi.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -92,7 +92,7 @@ public interface AuthApi {
             @ApiResponse(
                     responseCode = "200",
                     description = "Пользователь успешно зарегистрирован",
-                    content = @Content(schema = @Schema(implementation = SignInResponse.class))
+                    content = @Content(schema = @Schema(implementation = SignUpResponse.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -106,15 +106,15 @@ public interface AuthApi {
             )
     })
     @PostMapping("/register")
-    ResponseEntity<SignInResponse> register(
+    ResponseEntity<SignUpResponse> register(
 
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Данные регистрации пользователя",
                     required = true,
-                    content = @Content(schema = @Schema(implementation = SignInRequest.class))
+                    content = @Content(schema = @Schema(implementation = SignUpRequest.class))
             )
             @Valid
             @RequestBody
-            SignInRequest request
+            SignUpRequest request
     );
 }

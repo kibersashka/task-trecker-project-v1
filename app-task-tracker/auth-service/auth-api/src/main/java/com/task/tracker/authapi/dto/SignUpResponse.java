@@ -5,7 +5,7 @@ import com.task.tracker.authapi.status.Role;
 import java.util.Set;
 import java.util.UUID;
 
-public record SignInResponse(
+public record SignUpResponse(
         UUID id,
         String username,
         Set<Role> roles

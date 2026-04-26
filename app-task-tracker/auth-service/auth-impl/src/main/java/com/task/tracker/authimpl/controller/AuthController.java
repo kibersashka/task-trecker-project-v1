@@ -1,13 +1,12 @@
 package com.task.tracker.authimpl.controller;
 
 import com.task.tracker.authapi.dto.LoginResponse;
-import com.task.tracker.authapi.dto.SignInRequest;
-import com.task.tracker.authapi.dto.SignInResponse;
+import com.task.tracker.authapi.dto.SignUpRequest;
+import com.task.tracker.authapi.dto.SignUpResponse;
 import com.task.tracker.authapi.dto.TokenCouple;
 import com.task.tracker.authimpl.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.Token;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<SignInResponse> register(@RequestBody SignInRequest registerRequest) {
+    public ResponseEntity<SignUpResponse> register(@RequestBody SignUpRequest registerRequest) {
         log.info("Account register request | username={}", registerRequest.username());
-        SignInResponse response = authService.signIn(registerRequest);
+        SignUpResponse response = authService.signUp(registerRequest);
         return ResponseEntity.ok(response);
     }
 

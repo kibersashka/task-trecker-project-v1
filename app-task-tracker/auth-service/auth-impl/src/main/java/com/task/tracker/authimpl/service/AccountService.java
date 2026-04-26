@@ -1,12 +1,11 @@
 package com.task.tracker.authimpl.service;
 
-import com.task.tracker.authapi.dto.SignInRequest;
+import com.task.tracker.authapi.dto.SignUpRequest;
 import com.task.tracker.authapi.status.AccountStatus;
 import com.task.tracker.authapi.status.Role;
 import com.task.tracker.authimpl.entity.Account;
 import com.task.tracker.authimpl.exception.AccountNotActiveException;
 import com.task.tracker.authimpl.exception.AccountNotFoundException;
-import com.task.tracker.authimpl.exception.NoSuchDefaultAccountRoleException;
 import com.task.tracker.authimpl.exception.UsernameAlreadyExistsException;
 import com.task.tracker.authimpl.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class AccountService {
         return accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
     }
 
-    public Account save(SignInRequest requestDto) {
+    public Account save(SignUpRequest requestDto) {
         String username = requestDto.username();
         String rawPassword = requestDto.rawPassword();
 

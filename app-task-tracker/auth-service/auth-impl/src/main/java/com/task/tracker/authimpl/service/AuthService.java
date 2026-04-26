@@ -1,5 +1,7 @@
 package com.task.tracker.authimpl.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.tracker.authapi.dto.*;
 import com.task.tracker.authapi.status.Role;
 import com.task.tracker.authimpl.entity.Account;
@@ -8,6 +10,8 @@ import com.task.tracker.authimpl.exception.AccountNotFoundException;
 import com.task.tracker.authimpl.exception.InvalidSessionException;
 import com.task.tracker.authimpl.jwt.provider.JwtRefreshTokenProvider;
 import com.task.tracker.authimpl.jwt.service.JwtService;
+import com.task.tracker.authimpl.kafka.EventPublisher;
+import com.task.tracker.commonlib.dto.SignUpEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +25,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AuthService {
 
+    private final EventPublisher eventPublisher;
     private final JwtService jwtService;
     private final AccountService accountService;
     private final AuthenticatedService authenticatedService;
     private final JwtRefreshTokenProvider jwtRefreshTokenProvider;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public TokenCouple login(String username, String password) {
@@ -53,7 +59,8 @@ public class AuthService {
     }
 
     @Transactional
-    public SignInResponse signIn(SignInRequest registerRequest) {
+    public SignUpResponse signUp(SignUpRequest registerRequest) {
+
         Account account = accountService.save(registerRequest);
 
         log.info("Account registered | accountId={}", account.getId());
@@ -62,7 +69,23 @@ public class AuthService {
                 .map(r -> Role.valueOf(r.name()))
                 .collect(Collectors.toSet());
 
-        return new SignInResponse(
+        //TODO публикация события "auth.sing.up.command"
+        String json = null;
+        try {
+            json = objectMapper.writeValueAsString(new SignUpEvent(
+                    account.getId(),
+                    registerRequest.email()
+            ));
+        } catch (JsonProcessingException e) {
+            log.debug(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        eventPublisher.publishSingUpSuccess(
+                json,
+                account.getId()
+        );
+
+        return new SignUpResponse(
                 account.getId(),
                 account.getUsername(),
                 roles
@@ -90,5 +113,4 @@ public class AuthService {
                 roles
         );
     }
-    //TODO удалить роль
 }

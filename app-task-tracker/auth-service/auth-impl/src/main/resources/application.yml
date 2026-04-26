@@ -1,0 +1,70 @@
+spring:
+  kafka:
+    date:
+      format:
+        "yyyy-MM-dd"
+    bootstrap-servers: localhost:9092
+    listener:
+      ack-mode: manual
+      concurrency: 3
+  application:
+    name: auth-service
+
+  springdoc:
+    api-docs:
+      enabled: false
+    swagger-ui:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/database-changelog-master.yml
+    enabled: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+
+jwt:
+  secret: ${JWT_ACCESS_SECRET:very-long-secret-key-min-64-chars-for-hs512-algorithm-replace-in-prod-123456}
+  expiration:
+    access:
+      mills: ${JWT_ACCESS_EXPIRATION_MS:900000}  # 15?
+
+  token:
+    secret: ${JWT_ACCESS_SECRET:very-long-secret-key-min-64-chars-for-hs512-algorithm-replace-in-prod-123456}
+    expires:
+      at: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # 7?
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.task.tracker: DEBUG
+    org.springframework.security: INFO

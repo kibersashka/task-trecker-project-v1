@@ -2,9 +2,13 @@ package com.task.tracker.authapi.dto;
 
 import com.task.tracker.authapi.status.Role;
 
-public record SignInRequest(
+import java.time.Instant;
+
+public record SignUpRequest(
         String username,
         String rawPassword,
-        Role role
+        Role role,
+        Instant birthday,
+        String email
 ) {
 }
