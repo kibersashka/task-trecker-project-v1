@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20262604-create-table-acount-info
+      author: adveldyaeva
+      changes:
+        - createTable:
+            tableName: account_info
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: xp
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

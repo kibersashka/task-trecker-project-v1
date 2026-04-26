@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/v1/DDL/20262604-create-table-acount-info.yml
+      relativeToChangelogFile: false
+
+
+
+
+
