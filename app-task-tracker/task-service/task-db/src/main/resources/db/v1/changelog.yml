@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/v1/DDL/20262604-create-table-tag.yml
+      relativeToChangelogFile: false
+  - include:
+      file: db/v1/DDL/20262604-create-table-task.yml
+      relativeToChangelogFile: false
+  - include:
+      file: db/v1/DDL/20262604-create-table-task-tags.yml
+      relativeToChangelogFile: false
+
+
+
