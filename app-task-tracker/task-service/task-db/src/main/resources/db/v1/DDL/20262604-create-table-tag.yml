@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20262604-create-tag-table
+      author: adveldyaeva
+      changes:
+        - createTable:
+            tableName: tag
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: varchar(500)
+
+              - column:
+                  name: color
+                  type: varchar(50)

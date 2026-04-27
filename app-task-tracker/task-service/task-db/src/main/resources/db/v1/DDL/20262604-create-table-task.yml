@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20262604-create-task-table
+      author: adveldyaeva
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: text
+
+              - column:
+                  name: status
+                  type: varchar(50)
+
+              - column:
+                  name: priority
+                  type: varchar(50)
+
+              - column:
+                  name: account_id
+                  type: UUID
+
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: completed_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: due_date
+                  type: timestamp
