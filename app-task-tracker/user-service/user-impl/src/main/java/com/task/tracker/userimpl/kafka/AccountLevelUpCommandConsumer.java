@@ -26,20 +26,20 @@ public class AccountLevelUpCommandConsumer {
             topics = "task.level.up.command",
             containerFactory = "kafkaListenerContainerFactory"
     )
-    @Transactional
     public void listenSignUp(
             String json,
             Acknowledgment acknowledgment
     ) {
         try {
             AccountLevelUpEvent accountLevelUpEvent = objectMapper.readValue(json, AccountLevelUpEvent.class);
-            AccountInfo accountInfo = accountInfoService.findAccountInfoById(accountLevelUpEvent.account_id());
-            accountInfoService.updateXp(accountInfo, accountLevelUpEvent.xpCount());
+            accountInfoService.updateXp(accountLevelUpEvent.account_id(), accountLevelUpEvent.xpCount());
             log.debug("Sign Up Event received: [{}]", accountLevelUpEvent.account_id());
+            log.info("ё: [{}]", accountLevelUpEvent);
 
             acknowledgment.acknowledge();
         } catch (Exception ex) {
             log.error("Failed to send sign up {}", json);
+            acknowledgment.acknowledge();
         }
     }
 }
