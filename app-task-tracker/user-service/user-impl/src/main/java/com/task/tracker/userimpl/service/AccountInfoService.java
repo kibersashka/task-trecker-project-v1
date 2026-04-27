@@ -32,7 +32,12 @@ public class AccountInfoService {
     }
 
     @Transactional
-    public void updateXp(AccountInfo accountInfo, Integer xp) {
+    public void updateXp(UUID id, Integer xp) {
+        AccountInfo accountInfo = accountInfoRepository.findAccountInfoById(id)
+                .orElseThrow(
+                        () -> new UserNotFoundException(id)
+                );
+        log.info("Xp updated: [{}]", accountInfo);
         Integer currentXp = accountInfo.getXp();
         accountInfo.setXp(currentXp + xp);
     }
