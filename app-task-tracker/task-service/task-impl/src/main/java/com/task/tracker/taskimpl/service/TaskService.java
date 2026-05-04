@@ -1,13 +1,14 @@
 package com.task.tracker.taskimpl.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task.tracker.commonlib.dto.AccountLevelUpEvent;
+import com.task.tracker.commonlib.dto.TaskLevelUpEvent;
 import com.task.tracker.taskapi.dto.TaskRequest;
 import com.task.tracker.taskapi.dto.TaskSearchRequest;
 import com.task.tracker.taskapi.dto.TaskSearchResponse;
 import com.task.tracker.taskimpl.entity.Task;
 import com.task.tracker.taskapi.TaskStatus;
 import com.task.tracker.taskimpl.exception.TaskNotFoundException;
+import com.task.tracker.taskimpl.kafka.EventPublisher;
 import com.task.tracker.taskimpl.kafka.EventPublisherPort;
 import com.task.tracker.taskimpl.mapper.TaskMapper;
 import com.task.tracker.taskimpl.repository.TaskCriteriaRepository;
@@ -26,7 +27,7 @@ import java.util.UUID;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskCriteriaRepository repository;
-    private final EventPublisherPort eventPublisherPort;
+    private final EventPublisher eventPublisherPort;
     private final ObjectMapper objectMapper;
     private final TaskMapper taskMapper;
 
@@ -44,7 +45,7 @@ public class TaskService {
 
         try {
             String json = objectMapper.writeValueAsString(
-                    new AccountLevelUpEvent(
+                    new TaskLevelUpEvent(
                             savedTask.getPriority().getXpCount(),
                             savedTask.getAccountId()
                     )

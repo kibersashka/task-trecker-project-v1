@@ -43,7 +43,7 @@ public class Task {
 
     private Instant dueDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "task_tags",
             joinColumns = @JoinColumn(name = "task_id"),
