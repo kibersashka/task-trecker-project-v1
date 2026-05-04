@@ -42,8 +42,8 @@ public class SignUpCommandConsumer {
             accountInfoService.save(accountInfo);
 
             acknowledgment.acknowledge();
-            log.debug("Sign Up Event received:!!!!! [{}]", signUpEvent.account_id());
         } catch (Exception e) {
+            acknowledgment.acknowledge();
             log.error("Failed to send sign up {}", signUpEvent.email());
             throw e;
         }
