@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260205-create-table-reminder
+      author: adveldyaeva
+
+      changes:
+        - createTable:
+            tableName: reminder
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: task_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: reminder_time
+                  type: TIMESTAMP
+
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: reminder
+            baseColumnNames: task_id
+            referencedTableName: tasks
+            referencedColumnNames: id
+            constraintName: fk_reminder_task
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: reminder
+            indexName: idx_reminder_time
+            columns:
+              - column:
+                  name: reminder_time
+
+        - createIndex:
+            tableName: reminder
+            indexName: idx_reminder_status
+            columns:
+              - column:
+                  name: status
+
+  - changeSet:
+      id: 20260205-change-type
+      author: adveldyaeva
+      changes:
+        - modifyDataType:
+            tableName: reminder
+            columnName: reminder_time
+            newDataType: JAVA.SQL.TYPES.TIMESTAMP_WITH_TIMEZONE

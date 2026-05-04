@@ -8,6 +8,9 @@ databaseChangeLog:
   - include:
       file: db/v1/DDL/20262604-create-table-task-tags.yml
       relativeToChangelogFile: false
+  - include:
+      file: db/v1/DDL/20260205-create-table-reminder.yml
+      relativeToChangelogFile: false
 
 
 
