@@ -12,7 +12,9 @@ import java.util.List;
 public record AccountDetails(Account account) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(account.getRoles())));
+        return account.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .toList();
     }
 
     @Override
