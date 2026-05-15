@@ -52,8 +52,11 @@ public class AccountInfoService {
         AccountStatus oldStatus = accountInfo.getAccountStatus();
 
         while (canLevelUp(accountInfo)) {
+            log.info("Xp updated: [{}]", accountInfo);
             levelUp(accountInfo);
         }
+
+        log.info("Xp updated: [{}]", accountInfo);
 
         AccountStatus newStatus = accountInfo.getAccountStatus();
 

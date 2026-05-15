@@ -27,14 +27,15 @@ public class AccountLevelUpCommandConsumer {
             Acknowledgment acknowledgment
     ) {
         try {
+            log.info("listenSignUp | {}", json);
             TaskLevelUpEvent accountLevelUpEvent = objectMapper.readValue(json, TaskLevelUpEvent.class);
-            accountInfoService.updateXp(accountLevelUpEvent.account_id(), accountLevelUpEvent.xpCount());
-            log.debug("Sign Up Event received: [{}]", accountLevelUpEvent.account_id());
+            accountInfoService.updateXp(accountLevelUpEvent.accountId(), accountLevelUpEvent.xpCount());
+            log.debug("Level up Event received: [{}]", accountLevelUpEvent.accountId());
             log.info("ё: [{}]", accountLevelUpEvent);
 
             acknowledgment.acknowledge();
         } catch (Exception ex) {
-            log.error("Failed to send sign up {}", json);
+            log.error("Failed to send level up {} {}", json, ex.getMessage());
             acknowledgment.acknowledge();
         }
     }

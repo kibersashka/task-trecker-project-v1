@@ -23,7 +23,7 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, Object> consumerFactory() {
+    public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -42,12 +42,7 @@ public class KafkaConsumerConfig {
 
         config.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                JsonDeserializer.class
-        );
-
-        config.put(
-                JsonDeserializer.TRUSTED_PACKAGES,
-                "*"
+                StringDeserializer.class
         );
 
         config.put(
@@ -63,10 +58,10 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object>
+    public ConcurrentKafkaListenerContainerFactory<String, String>
     kafkaListenerContainerFactory() {
         var factory =
-                new ConcurrentKafkaListenerContainerFactory<String, Object>();
+                new ConcurrentKafkaListenerContainerFactory<String, String>();
         factory.setConsumerFactory(consumerFactory());
 
         factory.getContainerProperties()

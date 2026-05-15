@@ -26,18 +26,20 @@ public class SignUpCommandConsumer {
             String json,
             Acknowledgment acknowledgment
     ) {
+        log.info("listenSignUp | {}", json);
         SignUpEvent signUpEvent = null;
         try {
             signUpEvent = objectMapper.readValue(json, SignUpEvent.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        log.debug("Sign Up Event received: [{}]", signUpEvent.account_id());
+        log.debug("Sign Up Event received: [{}]", signUpEvent.accountId());
 
         try {
             AccountInfo accountInfo = AccountInfo.create(
-                    signUpEvent.account_id(),
-                    signUpEvent.email()
+                    signUpEvent.accountId(),
+                    signUpEvent.email(),
+                    signUpEvent.username()
             );
             accountInfoService.save(accountInfo);
 

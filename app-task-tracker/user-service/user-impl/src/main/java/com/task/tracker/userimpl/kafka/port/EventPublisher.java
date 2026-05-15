@@ -14,16 +14,13 @@ public class EventPublisher implements EventPublisherPort {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
     @Override
-    public void publish(String topic, String key, Object payload) {
+    public void publish(String topic, String key, String payload) {
         log.debug("Publishing event for topic [{}] and key [{}]", topic, key);
-        try {
             kafkaTemplate.send(
                     topic,
                     key,
-                    objectMapper.writeValueAsString(payload)
+                    payload
             );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

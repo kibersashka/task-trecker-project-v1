@@ -6,7 +6,7 @@ public interface EventPublisherPort {
 
     String TASK_LEVEL_UP_COMMAND = "account.level.up.command";
 
-    void publish(String topic, String key, Object payload);
+    void publish(String topic, String key, String payload);
 
     default void publishLevelUp(
             String jsonPayload,

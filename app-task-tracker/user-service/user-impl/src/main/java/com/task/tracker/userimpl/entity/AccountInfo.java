@@ -22,19 +22,23 @@ public class AccountInfo {
 
     private String email;
 
+    private String username;
+
     private Integer xp;
 
     private AccountStatus accountStatus;
 
     public static AccountInfo create(
             UUID account_id,
-            String email
+            String email,
+            String username
     ) {
         return AccountInfo.builder()
                 .accountStatus(AccountStatus.INTER)
                 .email(email)
                 .id(account_id)
                 .xp(0)
+                .username(username)
                 .build();
     }
 }
