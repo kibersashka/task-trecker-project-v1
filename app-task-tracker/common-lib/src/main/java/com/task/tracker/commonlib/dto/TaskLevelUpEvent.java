@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record TaskLevelUpEvent(
         Integer xpCount,
-        UUID account_id
+        UUID accountId
 ) {
 }

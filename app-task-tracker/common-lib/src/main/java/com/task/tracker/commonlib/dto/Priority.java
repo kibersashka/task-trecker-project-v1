@@ -1,4 +1,4 @@
-package com.task.tracker.taskapi;
+package com.task.tracker.commonlib.dto;
 
 public enum Priority {
 

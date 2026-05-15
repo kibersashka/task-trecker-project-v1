@@ -1,4 +1,4 @@
-package com.task.tracker.authapi.status;
+package com.task.tracker.commonlib.dto;
 
 public enum Role {
     USER,

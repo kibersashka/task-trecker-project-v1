@@ -5,7 +5,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record SignUpEvent(
-        UUID account_id,
-        String email
+        UUID accountId,
+        String email,
+        String username
 ) {
 }
