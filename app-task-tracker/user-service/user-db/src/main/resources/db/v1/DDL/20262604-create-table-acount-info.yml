@@ -25,3 +25,43 @@ databaseChangeLog:
                   defaultValueNumeric: 0
                   constraints:
                     nullable: false
+
+
+  - changeSet:
+      id: 20260508-add-account-status-to-account-info
+      author: adveldyaeva
+      changes:
+        - addColumn:
+            tableName: account_info
+            columns:
+              - column:
+                  name: account_status
+                  type: VARCHAR(32)
+                  defaultValue: INTER
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 20260513-add-username-to-account-info-v2
+      author: adveldyaeva
+      changes:
+        - addColumn:
+            tableName: account_info
+            columns:
+              - column:
+                  name: username
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: true
+
+        - update:
+            tableName: account_info
+            columns:
+              - column:
+                  name: username
+                  value: anonymous
+            where: username IS NULL
+
+        - addNotNullConstraint:
+            tableName: account_info
+            columnName: username
+            columnDataType: VARCHAR(100)
