@@ -26,3 +26,15 @@ databaseChangeLog:
               - column:
                   name: color
                   type: varchar(50)
+
+
+  - changeSet:
+      id: 20260510-add-account-id-to-tag
+      author: adveldyaeva
+      changes:
+        - addColumn:
+            tableName: tag
+            columns:
+              - column:
+                  name: account_id
+                  type: UUID
