@@ -1,6 +1,7 @@
 package com.task.tracker.aiimpl.config;
 
 import com.task.tracker.aiimpl.config.properties.GeminiProperties;
+import com.task.tracker.aiimpl.config.properties.GroqProperties;
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +14,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class OkHttpConfig {
 
-    @Qualifier("geminiProperties")
-    private final GeminiProperties properties;
+    private final GroqProperties properties;
 
     @Bean
     public OkHttpClient okHttpClient() {

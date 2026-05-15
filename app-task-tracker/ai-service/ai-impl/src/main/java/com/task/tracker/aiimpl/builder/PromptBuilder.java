@@ -1,6 +1,7 @@
 package com.task.tracker.aiimpl.builder;
 
 import com.task.tracker.aiapi.dto.TaskSummary;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -9,6 +10,7 @@ import java.util.List;
 
 
 @Component
+@Slf4j
 public class PromptBuilder {
 
     private static final DateTimeFormatter FORMATTER =
@@ -55,6 +57,7 @@ public class PromptBuilder {
         }
 
         sb.append("Верни JSON с полями recommendations и generalAdvice.");
+        log.info("FINAL USER PROMPT:\n{}", sb);
         return sb.toString();
     }
 }

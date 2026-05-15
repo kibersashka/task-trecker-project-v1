@@ -2,9 +2,12 @@ package com.task.tracker.aiimpl.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.task.tracker.aiapi.dto.AnthropicResponse;
-import com.task.tracker.aiimpl.config.properties.GeminiProperties;
+import com.task.tracker.aiimpl.config.properties.GroqProperties;
 import com.task.tracker.aiimpl.exception.AnthropicApiException;
+import com.task.tracker.aiimpl.exception.RateLimitException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -19,83 +22,116 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AiClient {
 
-    private final OkHttpClient httpClient;
-    private final ObjectMapper objectMapper;
-    private final GeminiProperties properties;
+    private static final String ENDPOINT = "/openai/v1/chat/completions";
+    private static final MediaType JSON   = MediaType.get("application/json; charset=utf-8");
+
+    private final OkHttpClient   httpClient;
+    private final ObjectMapper   objectMapper;
+    private final GroqProperties properties;
+
 
     public AnthropicResponse complete(String systemPrompt, String userPrompt) {
+        String url         = properties.getBaseUrl() + ENDPOINT;
         String requestBody = buildRequestBody(systemPrompt, userPrompt);
 
+        log.debug("Groq request | model={} | url={}", properties.getModel(), url);
+
         Request request = new Request.Builder()
-                .url(properties.getBaseUrl()
-                        + "/v1/"
-                        + properties.getModel()
-                        + ":generateContent?key="
-                        + properties.getApiKey())
+                .url(url)
+                .header("Authorization", "Bearer " + properties.getApiKey())
                 .header("Content-Type", "application/json")
-                .post(RequestBody.create(requestBody, MediaType.get("application/json")))
+                .post(RequestBody.create(requestBody, JSON))
                 .build();
 
         try (Response response = httpClient.newCall(request).execute()) {
+            String body = response.body() != null ? response.body().string() : "";
+
             if (!response.isSuccessful()) {
-                String errorBody = response.body() != null ? response.body().string() : "empty body";
-
-                log.error("AnthropicClient request failed with status code {}", response.code());
-
+                log.error("Groq error | status={} | body={}", response.code(), body);
                 throw new AnthropicApiException(
-                        "AnthropicClient request failed with status code " + response.code()
+                        "Groq вернул " + response.code() + ": " + body
                 );
             }
 
-            String responseBody = response.body().string();
+            if (response.code() == 429) {
+                log.warn("Rate limit hit, retry later");
+                throw new RateLimitException("Groq rate limit");
+            }
 
-            return parseResponse(responseBody);
+            log.debug("Groq response: {}", body);
+            return parseResponse(body);
 
         } catch (IOException e) {
-            log.error("Error for Anthropic API | message={}", e.getMessage());
-            throw new AnthropicApiException("Not connect for Anthropic API: " + e.getMessage());        }
-    }
-
-    private String buildRequestBody(String systemPrompt, String userPrompt) {
-        try {
-            Map<String, Object> body = Map.of(
-                    "contents", List.of(
-                            Map.of(
-                                    "parts", List.of(
-                                            Map.of("text", systemPrompt + "\n\n" + userPrompt)
-                                    )
-                            )
-                    )
-            );
-            return objectMapper.writeValueAsString(body);
-        } catch (Exception e) {
-            throw new AnthropicApiException("Nor Serialize Anthropic");
+            log.error("Groq connection error: {}", e.getMessage());
+            throw new AnthropicApiException("Нет соединения с Groq: " + e.getMessage());
         }
     }
 
+    /**
+     * {
+     *   "model": "llama-3.3-70b-versatile",
+     *   "messages": [
+     *     { "role": "system",  "content": "..." },
+     *     { "role": "user",    "content": "..." }
+     *   ],
+     *   "max_tokens": 1024,
+     *   "temperature": 0.3
+     * }
+     */
+    private String buildRequestBody(String systemPrompt, String userPrompt) {
+        try {
+            ObjectNode root = objectMapper.createObjectNode();
+
+            root.put("model", properties.getModel());
+            root.put("max_tokens", properties.getMaxTokens());
+            root.put("temperature", 0.3);
+
+            ArrayNode messages = root.putArray("messages");
+
+            ObjectNode system = messages.addObject();
+            system.put("role", "system");
+            system.put("content", systemPrompt != null ? systemPrompt : "");
+
+            ObjectNode user = messages.addObject();
+            user.put("role", "user");
+            user.put("content", userPrompt != null ? userPrompt : "");
+
+            return objectMapper.writeValueAsString(root);
+
+        } catch (Exception e) {
+            throw new AnthropicApiException("Ошибка сборки запроса к Groq: " + e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * {
+     *   "choices": [{ "message": { "content": "..." } }],
+     *   "usage": { "prompt_tokens": N, "completion_tokens": M }
+     * }
+     */
     private AnthropicResponse parseResponse(String responseBody) {
         try {
             JsonNode root = objectMapper.readTree(responseBody);
 
             String text = root
-                    .path("candidates")
+                    .path("choices")
                     .get(0)
+                    .path("message")
                     .path("content")
-                    .path("parts")
-                    .get(0)
-                    .path("text")
                     .asText();
 
-            int inputTokens = root.path("usageMetadata").path("promptTokenCount").asInt(0);
-            int outputTokens = root.path("usageMetadata").path("candidatesTokenCount").asInt(0);
+            int inputTokens  = root.path("usage").path("prompt_tokens").asInt(0);
+            int outputTokens = root.path("usage").path("completion_tokens").asInt(0);
 
-            log.debug("Anthropic response received | inputTokens={} | outputTokens={}", inputTokens, outputTokens);
+            log.info("Groq OK | model={} | in={} out={}",
+                    properties.getModel(), inputTokens, outputTokens);
 
             return new AnthropicResponse(text, inputTokens, outputTokens);
 
         } catch (Exception e) {
-            log.error("Error for Anthropic | body={}", responseBody);
-            throw new AnthropicApiException("Nor valid Anthropic API");
+            log.error("Не удалось распарсить ответ Groq | body={}", responseBody);
+            throw new AnthropicApiException("Некорректный ответ от Groq: " + e.getMessage());
         }
     }
 }
