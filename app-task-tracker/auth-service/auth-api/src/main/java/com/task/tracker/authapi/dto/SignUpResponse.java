@@ -1,6 +1,7 @@
 package com.task.tracker.authapi.dto;
 
-import com.task.tracker.authapi.status.Role;
+
+import com.task.tracker.commonlib.dto.Role;
 
 import java.util.Set;
 import java.util.UUID;
