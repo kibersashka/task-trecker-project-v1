@@ -1,40 +1,40 @@
 package com.task.tracker.taskimpl.controller;
 
-import com.task.tracker.taskapi.dto.TagResuest;
-import com.task.tracker.taskimpl.entity.Tag;
+import com.task.tracker.taskapi.api.TagControllerApi;
+import com.task.tracker.taskapi.dto.TagRequest;
+import com.task.tracker.taskapi.dto.TagResponse;
 import com.task.tracker.taskimpl.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tags")
 @RequiredArgsConstructor
-public class TagController {
+public class TagController implements TagControllerApi {
 
     private final TagService tagService;
 
-    @PostMapping
-    public ResponseEntity<Tag> create(@RequestBody TagResuest request) {
+    @Override
+    public ResponseEntity<TagResponse> create(TagRequest request) {
         return ResponseEntity.ok(tagService.create(request));
     }
 
-    @PutMapping
-    public ResponseEntity<Tag> update(@RequestBody TagResuest request) {
+    @Override
+    public ResponseEntity<TagResponse> update(TagRequest request) {
         return ResponseEntity.ok(tagService.update(request));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @Override
+    public ResponseEntity<Void> delete(UUID id) {
         tagService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/account/{accountId}")
-    public ResponseEntity<List<Tag>> getByAccount(@PathVariable UUID accountId) {
+    @Override
+    public ResponseEntity<List<TagResponse>> getByAccount(UUID accountId) {
         return ResponseEntity.ok(tagService.findAllByAccountId(accountId));
     }
 }

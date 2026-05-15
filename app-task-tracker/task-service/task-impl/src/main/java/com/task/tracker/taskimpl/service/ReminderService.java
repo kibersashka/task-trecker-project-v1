@@ -30,10 +30,12 @@ public class ReminderService {
         Task task = taskRepository.findById(reminder.taskId())
                 .orElseThrow(() -> new TaskNotFoundException(reminder.taskId()));
 
-        if (reminder.reminderDate().isAfter(task.getDueDate())) {
-            throw new IllegalArgumentException("Reminder date cannot be after task due date");
+        if (task.getDueDate() != null
+                && reminder.reminderDate().isAfter(task.getDueDate())) {
+            throw new IllegalArgumentException(
+                    "Дата напоминания не может быть позже дедлайна задачи"
+            );
         }
-
         Reminder reminderEntity = reminderMapper.toEntity(reminder);
         reminderEntity.setStatus(ReminderStatus.READY_SEND);
         return reminderMapper.toResponse(reminderRepository.save(reminderEntity));

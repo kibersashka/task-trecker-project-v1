@@ -1,9 +1,6 @@
 package com.task.tracker.taskimpl.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -24,4 +21,7 @@ public class Tag {
     private String description;
 
     private String color;
+
+    @Column(name = "account_id")
+    private UUID accountId;
 }

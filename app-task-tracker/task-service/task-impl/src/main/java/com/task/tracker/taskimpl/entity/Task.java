@@ -1,7 +1,7 @@
 package com.task.tracker.taskimpl.entity;
 
-import com.task.tracker.taskapi.Priority;
-import com.task.tracker.taskapi.TaskStatus;
+import com.task.tracker.commonlib.dto.Priority;
+import com.task.tracker.commonlib.dto.TaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
