@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head('Регистрация')}"></head>
+<body class="auth-page">
+<div class="auth-wrap">
+<div class="auth-card">
+
+    <div class="auth-logo">
+        <span class="logo-mark lg">◆</span>
+        <h1>Создать аккаунт</h1>
+    </div>
+
+    <div th:if="${error}" class="flash flash--err" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post" th:object="${registerForm}" novalidate>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="fg">
+            <label>Имя пользователя</label>
+            <input type="text" th:field="*{username}" class="fi" placeholder="username"
+                   th:classappend="${#fields.hasErrors('username')}?' fi--err':''"/>
+            <span class="fe" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <div class="fg">
+            <label>Email</label>
+            <input type="email" th:field="*{email}" class="fi" placeholder="you@example.com"/>
+            <span class="fe" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
+
+        <div class="fg">
+            <label>Пароль</label>
+            <input type="password" th:field="*{rawPassword}" class="fi" placeholder="минимум 6 символов"
+                   th:classappend="${#fields.hasErrors('rawPassword')}?' fi--err':''"/>
+            <span class="fe" th:if="${#fields.hasErrors('rawPassword')}" th:errors="*{rawPassword}"></span>
+        </div>
+
+        <div class="fg">
+            <label>Дата рождения <span class="muted">(необязательно)</span></label>
+            <input type="date" th:field="*{birthday}" class="fi"/>
+        </div>
+
+        <button type="submit" class="btn btn--p btn--full">Зарегистрироваться</button>
+    </form>
+
+    <p class="auth-switch">Уже есть аккаунт? <a th:href="@{/login}">Войти</a></p>
+</div>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

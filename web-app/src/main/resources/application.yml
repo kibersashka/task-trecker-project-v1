@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: frontend-service
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true   # нужен для _method=DELETE в формах
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 30m
+
+services:
+  auth-url: ${AUTH_URL:http://localhost:8081}
+  task-url: ${TASK_URL:http://localhost:8085}
+  user-url: ${USER_URL:http://localhost:8082}
+  ai-url:   ${AI_URL:http://localhost:8084}
+  notification-url: ${NOTIFICATION_URL:http://localhost:8083}
+
+logging:
+  level:
+    com.task.tracker: DEBUG

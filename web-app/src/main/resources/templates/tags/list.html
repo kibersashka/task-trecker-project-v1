@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head('Теги')}"></head>
+<body>
+<div class="app">
+<th:block th:replace="~{layout/sidebar :: sidebar}"></th:block>
+<main class="main">
+
+    <div th:if="${success}" class="flash flash--ok  auto-hide" th:text="${success}"></div>
+    <div th:if="${error}"   class="flash flash--err auto-hide" th:text="${error}"></div>
+
+    <div class="ph">
+        <h2 class="pt">Теги</h2>
+        <button class="btn btn--p" onclick="openModal('mTagCreate')">+ Новый тег</button>
+    </div>
+
+    <div class="tag-grid">
+        <div th:if="${tags.empty}" class="empty"><p>Тегов пока нет</p></div>
+
+        <div th:each="t : ${tags}" class="tag-card">
+            <div class="tag-swatch" th:style="'background:'+${t.color?:'#e5e7eb'}"></div>
+            <div class="tag-info">
+                <strong th:text="${t.name}"></strong>
+                <span class="muted" th:text="${t.description}"></span>
+            </div>
+            <div class="tag-actions">
+                <button class="btn btn--sm btn--g"
+                        th:attr="data-id=${t.id},data-name=${t.name},
+                                 data-desc=${t.description},data-color=${t.color}"
+                        onclick="openTagEdit(this)">✎</button>
+                <form th:action="@{'/tags/'+${t.id}+'/delete'}" method="post" style="display:inline">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn--sm btn--d"
+                            onclick="return confirm('Удалить тег?')">✕</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+</div>
+
+<div id="mTagCreate" class="modal"><div class="modal__ov" onclick="closeModal('mTagCreate')"></div>
+<div class="modal__box modal__box--sm">
+    <div class="modal__hd"><h3>Новый тег</h3><button onclick="closeModal('mTagCreate')">✕</button></div>
+    <form th:action="@{/tags/create}" method="post" th:object="${tagForm}" novalidate>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="fg"><label>Название *</label>
+            <input type="text" th:field="*{name}" class="fi" placeholder="работа, учёба…"
+                   th:classappend="${#fields.hasErrors('name')}?' fi--err':''"/>
+            <span class="fe" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span></div>
+        <div class="fg"><label>Описание</label>
+            <input type="text" th:field="*{description}" class="fi" placeholder="Необязательно"/></div>
+        <div class="fg"><label>Цвет</label>
+            <input type="color" th:field="*{color}" class="fi-color"/></div>
+        <div class="modal__ft">
+            <button type="button" class="btn btn--g" onclick="closeModal('mTagCreate')">Отмена</button>
+            <button type="submit" class="btn btn--p">Создать</button>
+        </div>
+    </form>
+</div></div>
+
+<div id="mTagEdit" class="modal"><div class="modal__ov" onclick="closeModal('mTagEdit')"></div>
+<div class="modal__box modal__box--sm">
+    <div class="modal__hd"><h3>Редактировать тег</h3><button onclick="closeModal('mTagEdit')">✕</button></div>
+    <form id="tagEditForm" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="fg"><label>Название *</label>
+            <input type="text" name="name" id="teName" class="fi" required/></div>
+        <div class="fg"><label>Описание</label>
+            <input type="text" name="description" id="teDesc" class="fi"/></div>
+        <div class="fg"><label>Цвет</label>
+            <input type="color" name="color" id="teColor" class="fi-color"/></div>
+        <div class="modal__ft">
+            <button type="button" class="btn btn--g" onclick="closeModal('mTagEdit')">Отмена</button>
+            <button type="submit" class="btn btn--p">Сохранить</button>
+        </div>
+    </form>
+</div></div>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

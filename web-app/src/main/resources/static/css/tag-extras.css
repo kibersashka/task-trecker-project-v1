@@ -1,0 +1,30 @@
+
+.tag-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0;
+}
+
+.tag-check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tag-check-label input[type=checkbox] {
+    display: none;
+}
+
+.tag-check-label .tg {
+    opacity: 0.45;
+    transition: opacity .15s, box-shadow .15s;
+    cursor: pointer;
+}
+
+.tag-check-label input[type=checkbox]:checked + .tg {
+    opacity: 1;
+    box-shadow: 0 0 0 2px rgba(0,0,0,.25);
+}

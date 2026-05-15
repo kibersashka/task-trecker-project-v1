@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head('Доступ запрещён')}"></head>
+<body class="auth-page">
+<div class="auth-wrap"><div class="auth-card" style="text-align:center">
+    <div style="font-size:64px;color:#e5e7eb;font-weight:700">403</div>
+    <h2>Доступ запрещён</h2>
+    <p class="muted">Эта страница доступна только администраторам.</p>
+    <a href="/tasks" class="btn btn--p" style="margin-top:16px">На главную</a>
+</div></div>
+</body>
+</html>

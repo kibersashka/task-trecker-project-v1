@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head('TaskTracker')}"></head>
+<body class="landing-page">
+
+<header class="landing-header">
+    <div class="landing-header__logo">
+        <span class="logo-mark">◆</span>
+        <span class="logo-text">TaskTracker</span>
+    </div>
+    <div class="landing-header__nav">
+        <a th:href="@{/login}"    class="btn btn--g btn--sm">Войти</a>
+        <a th:href="@{/register}" class="btn btn--p btn--sm">Зарегистрироваться</a>
+    </div>
+</header>
+
+<main class="landing-main">
+
+    <section class="hero">
+        <h1 class="hero__title">Личный планировщик<br/>для тех кто делает</h1>
+        <p class="hero__sub">
+            Создавай задачи, расставляй приоритеты с помощью AI,<br/>
+            отслеживай прогресс и зарабатывай XP за выполненные дела.
+        </p>
+        <div class="hero__cta">
+            <a th:href="@{/register}" class="btn btn--p">Начать бесплатно</a>
+            <a th:href="@{/login}"    class="btn btn--g">Уже есть аккаунт</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-card__icon">☐</div>
+            <h3>Задачи</h3>
+            <p>Создавай, редактируй и фильтруй задачи по статусу и приоритету. Устанавливай дедлайны.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card__icon">▦</div>
+            <h3>Недельный вид</h3>
+            <p>Видь все дела на неделю вперёд — удобная сетка по дням с дедлайнами.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card__icon">✨</div>
+            <h3>AI-приоритизация</h3>
+            <p>Нажми одну кнопку — и AI расставит задачи в нужном порядке с объяснением почему.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card__icon">◈</div>
+            <h3>Теги</h3>
+            <p>Цветные теги помогают группировать задачи по контексту: работа, учёба, личное.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card__icon">⚡</div>
+            <h3>XP и уровни</h3>
+            <p>Зарабатывай опыт за выполненные задачи. Чем выше приоритет — тем больше XP.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card__icon">⏰</div>
+            <h3>Напоминания</h3>
+            <p>Устанавливай напоминания к задачам и получай уведомления вовремя.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="landing-footer">
+    <span class="logo-mark">◆</span>
+    <span>TaskTracker — личный планировщик</span>
+</footer>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

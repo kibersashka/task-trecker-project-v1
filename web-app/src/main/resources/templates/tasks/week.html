@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head('Неделя')}"></head>
+<body>
+<div class="app">
+    <th:block th:replace="~{layout/sidebar :: sidebar}"></th:block>
+    <main class="main">
+
+        <div class="ph">
+            <h2 class="pt">Неделя</h2>
+            <div class="week-nav">
+                <a th:href="@{/week(weekStart=${prevWeek})}" class="btn btn--g btn--sm">← Назад</a>
+                <span th:text="${weekStart}+' — '+${weekEnd}" class="muted"></span>
+                <a th:href="@{/week(weekStart=${nextWeek})}" class="btn btn--g btn--sm">Вперёд →</a>
+            </div>
+        </div>
+
+        <div class="week-grid">
+            <div th:each="e : ${byDay}" class="wday"
+                 th:classappend="${e.key==today}?' wday--today':''">
+
+                <div class="wday__hd">
+                <span th:text="${e.key==today ? 'Сегодня' :
+                    #strings.substring(e.key,8,10)+'.'+#strings.substring(e.key,5,7)}"></span>
+                    <span th:if="${!e.value.empty}" class="wday__count"
+                          th:text="${e.value.size()}"></span>
+                </div>
+
+                <div th:if="${e.value.empty}" class="wday__empty">—</div>
+
+                <div th:each="t : ${e.value}" class="wtask"
+                     th:classappend="${t.status=='COMPLETED'}?' wtask--done':''">
+
+                    <span class="pdot"
+                          th:classappend="'pdot--'+${t.priority?.toString()?.toLowerCase()}"></span>
+
+                    <div class="wtask__body">
+                        <span class="wtask__title" th:text="${t.title}"></span>
+
+                        <span class="wtask__time" th:if="${t.dueDate != null}"
+                              th:text="${#strings.substring(t.dueDate.toString(), 11, 16)}">
+                    </span>
+                    </div>
+
+                    <span class="badge-s badge-s--sm"
+                          th:classappend="'badge-s--'+${t.status?.toString()?.toLowerCase()}"
+                          th:text="${t.status == 'COMPLETED' ? '✓' :
+                                 t.status == 'PROCESSING' ? '▶' : '○'}"></span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
