@@ -1,7 +1,6 @@
 package com.task.tracker.authimpl.jwt.filter;
 
 import com.task.tracker.authapi.dto.AccountResponse;
-import com.task.tracker.authapi.status.Role;
 import com.task.tracker.authimpl.exception.AuthenticationHeaderException;
 import com.task.tracker.authimpl.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -72,8 +71,39 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(request, response);
+        } catch (AuthenticationHeaderException e) {
+
+            log.error("JWT authentication error: {}", e.getMessage());
+
+            SecurityContextHolder.clearContext();
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            response.getWriter().write("""
+                {
+                  "error": "Unauthorized",
+                  "message": "%s"
+                }
+                """.formatted(e.getMessage()));
+
         } catch (Exception e) {
-            log.error("Ошибка в фильтре сделать отлов {}", e.getMessage());
+
+            log.error("Unexpected authentication error", e);
+
+            SecurityContextHolder.clearContext();
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            response.getWriter().write("""
+                {
+                  "error": "Unauthorized",
+                  "message": "Authentication failed"
+                }
+                """);
         }
     }
 

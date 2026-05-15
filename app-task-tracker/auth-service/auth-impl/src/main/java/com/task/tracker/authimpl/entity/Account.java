@@ -1,7 +1,7 @@
 package com.task.tracker.authimpl.entity;
 
 import com.task.tracker.authapi.status.AccountStatus;
-import com.task.tracker.authapi.status.Role;
+import com.task.tracker.commonlib.dto.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

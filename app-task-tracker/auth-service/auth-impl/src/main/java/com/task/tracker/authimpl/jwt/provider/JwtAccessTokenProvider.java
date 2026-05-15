@@ -26,6 +26,7 @@ public class JwtAccessTokenProvider {
 
         Claims claims = Jwts.claims().setSubject(account.getUsername());
         claims.put(ROLES, account.getRoles());
+        claims.put("id", account.getId());
 
         return Jwts.builder()
                 .setClaims(claims)

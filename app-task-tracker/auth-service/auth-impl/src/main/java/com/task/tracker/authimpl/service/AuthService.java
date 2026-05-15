@@ -3,7 +3,7 @@ package com.task.tracker.authimpl.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.tracker.authapi.dto.*;
-import com.task.tracker.authapi.status.Role;
+import com.task.tracker.commonlib.dto.Role;
 import com.task.tracker.authimpl.entity.Account;
 import com.task.tracker.authimpl.entity.RefreshToken;
 import com.task.tracker.authimpl.exception.AccountNotFoundException;
@@ -69,17 +69,19 @@ public class AuthService {
                 .map(r -> Role.valueOf(r.name()))
                 .collect(Collectors.toSet());
 
-        //TODO публикация события "auth.sing.up.command"
         String json = null;
         try {
             json = objectMapper.writeValueAsString(new SignUpEvent(
                     account.getId(),
-                    registerRequest.email()
+                    registerRequest.email(),
+                    registerRequest.username()
             ));
         } catch (JsonProcessingException e) {
             log.debug(e.getMessage());
             throw new RuntimeException(e);
         }
+
+        log.info("Sign up event | accountId={}", json);
         eventPublisher.publishSingUpSuccess(
                 json,
                 account.getId()

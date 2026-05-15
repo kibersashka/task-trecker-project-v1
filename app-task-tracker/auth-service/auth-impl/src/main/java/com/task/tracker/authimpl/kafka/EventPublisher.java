@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Slf4j
 public class EventPublisher implements EventPublisherPort{
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     @Override
-    public void publish(String topic, String key, Object payload) {
+    public void publish(String topic, String key, String payload) {
         log.debug("Publishing event for topic [{}] and key [{}]", topic, key);
         kafkaTemplate.send(
                 topic,

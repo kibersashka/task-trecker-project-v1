@@ -6,7 +6,7 @@ public interface EventPublisherPort {
 
     String SIGN_UP_SUCCEEDED_COMMAND = "auth.sing.up.command";
 
-    void publish(String topic, String key, Object payload);
+    void publish(String topic, String key, String payload);
 
     default void publishSingUpSuccess(
             String jsonPayload,

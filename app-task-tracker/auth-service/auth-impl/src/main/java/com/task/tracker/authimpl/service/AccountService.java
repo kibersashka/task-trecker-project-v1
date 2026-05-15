@@ -2,7 +2,7 @@ package com.task.tracker.authimpl.service;
 
 import com.task.tracker.authapi.dto.SignUpRequest;
 import com.task.tracker.authapi.status.AccountStatus;
-import com.task.tracker.authapi.status.Role;
+import com.task.tracker.commonlib.dto.Role;
 import com.task.tracker.authimpl.entity.Account;
 import com.task.tracker.authimpl.exception.AccountNotActiveException;
 import com.task.tracker.authimpl.exception.AccountNotFoundException;

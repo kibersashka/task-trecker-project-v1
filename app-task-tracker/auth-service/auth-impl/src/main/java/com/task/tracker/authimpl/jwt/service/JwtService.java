@@ -9,7 +9,7 @@ import com.task.tracker.authimpl.exception.InvalidTokenException;
 import com.task.tracker.authimpl.jwt.properties.JwtTokenProperties;
 import com.task.tracker.authimpl.jwt.provider.JwtAccessTokenProvider;
 import com.task.tracker.authimpl.jwt.provider.JwtRefreshTokenProvider;
-import com.task.tracker.authapi.status.Role;
+import com.task.tracker.commonlib.dto.Role;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
