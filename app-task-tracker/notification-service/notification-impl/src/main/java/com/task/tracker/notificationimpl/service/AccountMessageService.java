@@ -36,6 +36,7 @@ public class AccountMessageService {
         return repository.save(notification).getId();
     }
 
+    @Transactional
     public void makeAsSend(UUID accountId) {
         AccountMessage accountMessage = repository.findById(accountId).orElseThrow(
                 () -> new AccountMessageNotFoundException(accountId)

@@ -10,6 +10,7 @@ import com.task.tracker.notificationimpl.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class LevelUpCommand {
-    public static final String ACCOUNT_LEVEL_UP = "account.level.up.reminder";
+    public static final String ACCOUNT_LEVEL_UP = "account.level.up.command";
 
     private final AccountMessageService accountMessageService;
     private final ObjectMapper objectMapper;
@@ -28,13 +29,14 @@ public class LevelUpCommand {
             topics = ACCOUNT_LEVEL_UP,
             containerFactory = "kafkaListenerContainerFactory"
     )
-    public void listen(String json) {
+    public void listen(String json, Acknowledgment ack) {
         try {
             AccountLevelUpEvent command = objectMapper.readValue(json, AccountLevelUpEvent.class);
 
             UUID messageId = accountMessageService.saveForEmailNotification(
                     command
             );
+            log.info("listenSignUp | {}", json);
 
             emailClient.sendEmail(
                     command.email(),
@@ -43,9 +45,11 @@ public class LevelUpCommand {
             );
 
             accountMessageService.makeAsSend(messageId);
+            ack.acknowledge();
             log.info("Reminder received: {}", json);
 
         } catch (Exception e) {
+            ack.acknowledge();
             log.error("Failed to process reminder", e);
         }
     }

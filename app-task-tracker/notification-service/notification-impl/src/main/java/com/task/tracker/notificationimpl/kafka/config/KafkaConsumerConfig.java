@@ -32,7 +32,7 @@ public class KafkaConsumerConfig {
 
         config.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "task-service"
+                "notification-service"
         );
 
         config.put(
@@ -44,12 +44,6 @@ public class KafkaConsumerConfig {
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class
         );
-
-        config.put(
-                JsonDeserializer.TRUSTED_PACKAGES,
-                "*"
-        );
-
         config.put(
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
                 "earliest"

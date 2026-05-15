@@ -34,13 +34,15 @@ public class NotificationService {
 
     public List<NotificationResponse> findAllByAccountId(UUID accountId) {
 
-        return notificationRepository.findAllByAccountIdAndStatus(
+        List<NotificationResponse> res = notificationRepository.findAllByAccountIdAndStatus(
                 accountId,
                 MessageStatus.AWAITING_DISPATCH
                 )
                 .stream()
                 .map(notificationMapper::toResponse)
                 .toList();
+        log.info("Notifications found: {}", res);
+        return res;
     }
 
     @Transactional

@@ -16,12 +16,13 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/notification")
+@RequestMapping("/api/notifications")
 public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/{accountId}")
     public ResponseEntity<List<NotificationResponse>> findAllByAccountId(@PathVariable UUID accountId) {
+        log.info("Find all notifications by account id: {}", accountId);
         return ResponseEntity.ok(notificationService.findAllByAccountId(accountId));
     }
 
